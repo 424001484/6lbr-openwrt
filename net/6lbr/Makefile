@@ -4,13 +4,13 @@ PKG_NAME:=6lbr
 PKG_VERSION:=1.5.0
 PKG_RELEASE:=0
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_URL:=https://github.com/cetic/6lbr.git
-PKG_SOURCE_VERSION:=6lbr-1.5.0
+PKG_SOURCE_URL:=https://github.com/424001484/6lbr_contiki-ng.git
+PKG_SOURCE_VERSION:=master
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz
 PKG_LICENSE:=BSD-3c
 PKG_LICENSE_FILES:=LICENSE
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)/6lbr
 
 
 include $(INCLUDE_DIR)/package.mk
@@ -32,28 +32,39 @@ define Package/6lbr/config
 	source "$(SOURCE)/Config.in"
 endef
 
-define Build/Compile
+#define Build/Compile
+#	unzip -q $(DL_DIR)/$(PKG_SOURCE) -d $(PKG_BUILD_DIR)
+#	mkdir -p $(PKG_BUILD_DIR)/examples/6lbr/bin
+#	$(MAKE) -C $(PKG_BUILD_DIR)/examples/6lbr clean
+#	CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" $(MAKE) -C $(PKG_BUILD_DIR)/examples/6lbr \
+#                TARGET=native CC="$(TARGET_CC)" LD="$(TARGET_CC)" AR="$(TARGET_AR)" V=1 CETIC_6LBR_ROUTER=1 WITH_UDPCLIENT=0
+#	mv $(PKG_BUILD_DIR)/examples/6lbr/cetic-6lbr.native $(PKG_BUILD_DIR)/examples/6lbr/bin/cetic_6lbr_router
+#	$(MAKE) -C $(PKG_BUILD_DIR)/examples/6lbr clean
+#	CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" $(MAKE) -C $(PKG_BUILD_DIR)/examples/6lbr \
+#                TARGET=native CC="$(TARGET_CC)" LD="$(TARGET_CC)" AR="$(TARGET_AR)" V=1 CETIC_6LBR_SMARTBRIDGE=1 WITH_UDPCLIENT=0
+#	mv $(PKG_BUILD_DIR)/examples/6lbr/cetic-6lbr.native $(PKG_BUILD_DIR)/examples/6lbr/bin/cetic_6lbr_smart_bridge
+#	$(MAKE) -C $(PKG_BUILD_DIR)/examples/6lbr clean
+#	CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" $(MAKE) -C $(PKG_BUILD_DIR)/examples/6lbr \
+#                CC="$(TARGET_CC)" LD="$(TARGET_CC)" AR="$(TARGET_AR)" V=1 CETIC_6LBR_6LR=1 WITH_UDPCLIENT=1 WITH_UDPSERVER=0
+#	mv $(PKG_BUILD_DIR)/examples/6lbr/cetic-6lbr.native $(PKG_BUILD_DIR)/examples/6lbr/bin/cetic_6lbr_6lr
+#ifeq ($(CONFIG_SIXLBR_COMPILE_PLUGINS),y)
+#	$(MAKE) -C $(PKG_BUILD_DIR)/examples/6lbr plugins-clean
+#	CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" $(MAKE) -C $(PKG_BUILD_DIR)/examples/6lbr \
+#                TARGET=native CC="$(TARGET_CC)" LD="$(TARGET_CC)" AR="$(TARGET_AR)" V=1 plugins
+#endif
+#	$(MAKE) -C $(PKG_BUILD_DIR)/examples/6lbr/tools clean
+#	CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" $(MAKE) -C $(PKG_BUILD_DIR)/examples/6lbr/tools \
+#                CC="$(TARGET_CC)" LD="$(TARGET_CC)" AR="$(TARGET_AR)" V=1
+#endef
+
+define Build/Prepare
+	unzip -q $(DL_DIR)/$(PKG_SOURCE) -d $(PKG_BUILD_DIR)
 	mkdir -p $(PKG_BUILD_DIR)/examples/6lbr/bin
-	$(MAKE) -C $(PKG_BUILD_DIR)/examples/6lbr clean
-	CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" $(MAKE) -C $(PKG_BUILD_DIR)/examples/6lbr \
-                TARGET=native CC="$(TARGET_CC)" LD="$(TARGET_CC)" AR="$(TARGET_AR)" V=1 CETIC_6LBR_ROUTER=1 WITH_UDPCLIENT=0
-	mv $(PKG_BUILD_DIR)/examples/6lbr/cetic-6lbr.native $(PKG_BUILD_DIR)/examples/6lbr/bin/cetic_6lbr_router
-	$(MAKE) -C $(PKG_BUILD_DIR)/examples/6lbr clean
-	CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" $(MAKE) -C $(PKG_BUILD_DIR)/examples/6lbr \
-                TARGET=native CC="$(TARGET_CC)" LD="$(TARGET_CC)" AR="$(TARGET_AR)" V=1 CETIC_6LBR_SMARTBRIDGE=1 WITH_UDPCLIENT=0
-	mv $(PKG_BUILD_DIR)/examples/6lbr/cetic-6lbr.native $(PKG_BUILD_DIR)/examples/6lbr/bin/cetic_6lbr_smart_bridge
-	$(MAKE) -C $(PKG_BUILD_DIR)/examples/6lbr clean
-	CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" $(MAKE) -C $(PKG_BUILD_DIR)/examples/6lbr \
-                CC="$(TARGET_CC)" LD="$(TARGET_CC)" AR="$(TARGET_AR)" V=1 CETIC_6LBR_6LR=1 WITH_UDPCLIENT=1 WITH_UDPSERVER=0
-	mv $(PKG_BUILD_DIR)/examples/6lbr/cetic-6lbr.native $(PKG_BUILD_DIR)/examples/6lbr/bin/cetic_6lbr_6lr
-ifeq ($(CONFIG_SIXLBR_COMPILE_PLUGINS),y)
-	$(MAKE) -C $(PKG_BUILD_DIR)/examples/6lbr plugins-clean
-	CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" $(MAKE) -C $(PKG_BUILD_DIR)/examples/6lbr \
-                TARGET=native CC="$(TARGET_CC)" LD="$(TARGET_CC)" AR="$(TARGET_AR)" V=1 plugins
-endif
-	$(MAKE) -C $(PKG_BUILD_DIR)/examples/6lbr/tools clean
-	CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" $(MAKE) -C $(PKG_BUILD_DIR)/examples/6lbr/tools \
-                CC="$(TARGET_CC)" LD="$(TARGET_CC)" AR="$(TARGET_AR)" V=1
+	$(MAKE) -C $(PKG_BUILD_DIR)/examples/6lbr clean CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)"
+endef
+
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR)/examples/6lbr WITH_CONTIKI=0 CONTIKI= $(PKG_BUILD_DIR)/../contiki-ng WERROR=0 all CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)"
 endef
 
 define Package/6lbr/install
